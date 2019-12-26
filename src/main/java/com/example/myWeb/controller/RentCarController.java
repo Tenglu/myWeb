@@ -8,32 +8,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.myWeb.model.Cars;
+import com.example.myWeb.model.UserInfo;
 import com.example.myWeb.service.RentCarService;
-import com.example.myWeb.service.impl.RentCarServiceImpl;
 
 import io.swagger.annotations.ApiOperation;
 
 
-@RestController("/rentacar")
+@RestController()
 public class RentCarController {
 	@Autowired
 	private RentCarService rentCarService;
     
 	@ApiOperation(value = "Get user location and date information")
-    @RequestMapping(value="/location/{location}/{startDate}/{endDate}", method = RequestMethod.GET, produces = "application/json")
-    public List<Cars> rentLocation(@PathVariable String location, @PathVariable String startDate, @PathVariable String endDate) {
-    	
-    	return rentCarService.getAllCarsInfo(location,startDate,endDate);
+    @RequestMapping(value="/location", method = RequestMethod.GET, produces = "application/json")
+    public List<Cars> rentLocation(@RequestParam int userId, @RequestParam String location, @RequestParam String startDate, @RequestParam String endDate) {
+  
+    	return rentCarService.getAvailableCarsInfo(userId,location,startDate,endDate);
     }
     
 	@ApiOperation(value = "List all the informations")
-    @RequestMapping(value="/reservation/{id}", method = RequestMethod.GET, produces = "application/json")
-    public Map<String,String> reserveInfo(@PathVariable String id) {
+    @RequestMapping(value="/reservation", method = RequestMethod.GET, produces = "application/json")
+    public Map<String,String> reserveInfo(@RequestParam int userId,@RequestParam String carId) {
     	Map map=new HashMap();
-    	map=rentCarService.getReservationInfo(Integer.parseInt(id));
+    	map=rentCarService.getReservationInfo(userId,Integer.parseInt(carId));
 		return map;
-
     }
+	
+	 @RequestMapping(value="/print", method = RequestMethod.GET, produces = "application/json")
+	public List<UserInfo> printUserInfo(){
+		return rentCarService.getAllUsersInfo();
+	}
     
 
 }
