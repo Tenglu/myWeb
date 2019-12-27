@@ -33,13 +33,12 @@ public class RentCarServiceImpl implements RentCarService {
 	
 	@Override
 	public List<Cars> getAvailableCarsInfo(int userId, String location,String startDate,String endDate) {
-		UserInfo userInfo =userList.stream().
-				filter(userList -> userList.getUserId()==userId).findAny().orElse(new UserInfo());
-		userInfo.setUserId(userId);
+	    UserInfo userInfo=userList.stream().
+				filter(userList -> userList.getUserId()==userId).findAny().orElseGet(() -> new UserInfo());
+	    userInfo.setUserId(userId);
 		userInfo.setLocation(location);
 		userInfo.setStartDate(startDate);
 		userInfo.setEndDate(endDate);
-		System.out.println(userInfo.toString());
 		userList.add(userInfo);
 		return cars;
 	}
