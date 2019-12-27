@@ -34,5 +34,11 @@ public class Cars {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public void decrease() {
+	    inStockNumber--;
+	}
 
+	public void increase() {
+        inStockNumber++;
+    }
 }

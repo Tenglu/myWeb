@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.myWeb.model.Cars;
 import com.example.myWeb.model.UserInfo;
 import com.example.myWeb.service.RentCarService;
+import com.google.common.base.Optional;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -29,15 +30,35 @@ public class RentCarController {
 	@ApiOperation(value = "List all the informations")
     @RequestMapping(value="/reservation", method = RequestMethod.GET, produces = "application/json")
     public Map<String,String> reserveInfo(@RequestParam int userId,@RequestParam String carId) {
-    	Map map=new HashMap();
-    	map=rentCarService.getReservationInfo(userId,Integer.parseInt(carId));
-		return map;
+		return rentCarService.getReservationInfo(userId,Integer.parseInt(carId));
     }
 	
-	 @RequestMapping(value="/print", method = RequestMethod.GET, produces = "application/json")
-	public List<UserInfo> printUserInfo(){
+	@RequestMapping(value="/confirmation", method = RequestMethod.GET, produces = "application/json")
+    public Map<String,String> confirmBooking(@RequestParam int userId) {
+         return rentCarService.confirmBooking(userId);
+    }
+	
+	@RequestMapping(value="/getBookingInfo", method = RequestMethod.GET, produces = "application/json")
+    public UserInfo printUserInfo(@RequestParam int userId){
+	    
+        return rentCarService.getBookingInfo(userId).get();
+    }
+	
+	 @RequestMapping(value="/getAllUsersInfo", method = RequestMethod.GET, produces = "application/json")
+	public List<UserInfo> getAllUsersInfo(){
 		return rentCarService.getAllUsersInfo();
 	}
     
+	 @RequestMapping(value="/cancelBooking", method = RequestMethod.GET, produces = "application/json")
+	    public Map<String,String> cancelBooking(@RequestParam int userId){
+	        return rentCarService.cancelBooking(userId);
+	    }
+	 
+	 
+	 @RequestMapping(value="/getStockInfo", method = RequestMethod.GET, produces = "application/json")
+     public List<Cars> getStockInfo(){
+         return rentCarService.getStockInfo();
+     }
+  
 
 }
